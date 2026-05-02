@@ -1,24 +1,51 @@
 
 // Imports
-import {create} from 'zustand'; 
-import type{ Patient, DropID} from '../Types/Types';
-import { v4 as uuidv4 } from 'uuid';
-type StatePatients = {
-    patients: Patient[],
-    addPatient: (Data: DropID) => void
+import { create } from 'zustand'
+import { v4 as uuidv4 } from 'uuid'
+import type { Patient } from '../Types/Types'  
+
+
+interface StatePatients {
+    patients: Patient[]
+    addPatient: (data: Omit<Patient, 'id'>) => void
+    deletePatient: (id: string) => void  
+    patiendEdit: Patient['id'] 
+    getPatiend: (id:string) => void
+    update: (data: Omit<Patient, 'id'>) => void
 }
 
-const createPatient = (patient: DropID) : Patient => {
-    return {...patient,id: uuidv4()}
-}
 
- export const UseStorePatients = create<StatePatients>((set) => ({ // Set: para actualizar el estado, get: para obtener el estado
-    patients: [],
-    addPatient: (Data) => {
-        console.log('GUARDANDOOO..????')
-        const NewID = createPatient(Data)
+export const UseStorePatients = create<StatePatients>((set) => ({
+    patients: [],  
+    patiendEdit:'',
+    
+    
+    addPatient: (data) => {
+        const newPatient: Patient = {
+            id: uuidv4(),  // ✅ UUID
+            ...data
+        }
         set((state) => ({
-            patients: [...state.patients, NewID]
+            patients: [...state.patients, newPatient]
+        }))
+    },
+    
+    
+    deletePatient: (id) => {
+        set((state) => ({
+            patients: state.patients.filter(patient => patient.id !== id)
+        }))
+    },
+    getPatiend:(id) => {
+        set(() => ({
+            patiendEdit: id
+        }))
+    },
+   
+    update:(id) => {
+        set((state) => ({
+            patients: state.patients.map((item) => item.id === state.patiendEdit ?
+            {id: state.patiendEdit, ...id} : item ), patiendEdit:''
         }))
     }
- }))
+}))

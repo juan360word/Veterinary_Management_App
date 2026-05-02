@@ -3,8 +3,8 @@ export type Patient ={
     id: string,
     name: string,
     caretaker:string,
-    Mail:string,
-    Date:Date,
+    email:string,
+    date:Date,
     symptoms:string,
 }
 

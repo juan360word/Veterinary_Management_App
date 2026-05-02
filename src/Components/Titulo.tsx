@@ -14,7 +14,7 @@ export const Titulo = () => {
             Patient Tracking - {''}
                 <span className=" text-purple-700">Animal Health</span>
             </h1>
-            <div className=" mt-12 md:flex">
+            <div className=" mt-12 flex">
             <Form/>
             <FormList/>
             </div>

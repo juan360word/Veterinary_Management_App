@@ -5,16 +5,41 @@ import { useForm } from "react-hook-form"
 import { Error } from "./Error"
 import type { DropID } from "../Types/Types"
 import { UseStorePatients } from "../Store/Store"
+import { useEffect } from "react"
 
 
 export const Form = () => {
 
     const {addPatient} = UseStorePatients()
-    const {register,handleSubmit,formState: {errors}} = useForm<DropID>()
+    const {patients} = UseStorePatients()
+    const {patiendEdit} = UseStorePatients()
+    const {update} = UseStorePatients()
+   
+    const {register,handleSubmit,setValue,formState: {errors},reset} = useForm<DropID>()
+
+    useEffect(() =>{
+        if(patiendEdit){
+            const edit = patients.filter(item => item.id === patiendEdit)[0]
+            setValue('name',edit.name)
+            setValue('caretaker',edit.caretaker)
+            setValue('email',edit.email)
+            setValue('date',edit.date)
+            setValue('symptoms',edit.symptoms)
+        }
+    },[patiendEdit])
 
     const RegisterPatients = (Data: DropID) => {
-        addPatient(Data)
-        
+
+        if(patiendEdit){
+            update(Data)
+        }else{
+            addPatient({
+            ...Data,
+            date: new Date(Data.date) // 👈 convierte string a Date
+        })
+        }
+
+        reset()
     }
 
   return (
@@ -77,20 +102,20 @@ export const Form = () => {
                   Mail
               </label>
               <input  
-                  id="Mail"
+                  id="email"
                   className="w-full p-3  border border-gray-100"  
-                  type="Mail" 
+                  type="email" 
                   placeholder="You Mail" 
-                  {...register("Mail", {
-                    required: "Mail requiered",
+                  {...register("email", {
+                    required: "email requiered",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Email No Válido'
+                      message: 'Email not value'
                     }
                   })} 
               />
-              {errors.Mail && (
-                     <Error>{errors.Mail?.message.toString()}</Error>
+              {errors.email && (
+                     <Error>{errors.email?.message.toString()}</Error>
                   )}
             </div>
 
@@ -102,12 +127,12 @@ export const Form = () => {
                     id="date"
                     className="w-full p-3  border border-gray-100"  
                     type="date" 
-                    {...register('Date',{
+                    {...register('date',{
                         required: 'Date is required'
                       })}
                 />
-                 {errors.Date && (
-                     <Error>{errors.Date?.message.toString()}</Error>
+                 {errors.date && (
+                     <Error>{errors.date?.message.toString()}</Error>
                   )}
             </div>
             
