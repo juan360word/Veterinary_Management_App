@@ -4,14 +4,16 @@
 import { useForm } from "react-hook-form"
 import { Error } from "./Error"
 import type { DropID } from "../Types/Types"
-
+import { UseStorePatients } from "../Store/Store"
 
 
 export const Form = () => {
 
+    const {addPatient} = UseStorePatients()
     const {register,handleSubmit,formState: {errors}} = useForm<DropID>()
 
     const RegisterPatients = (Data: DropID) => {
+        addPatient(Data)
         
     }
 
@@ -117,6 +119,9 @@ export const Form = () => {
                     id="symptoms"
                     className="w-full p-3  border border-gray-100"  
                     placeholder="Symptoms of the Patient" 
+                    {...register('symptoms', {
+                        required: 'Symptoms are required'
+                    })}
                 ></textarea>
             </div>
 

@@ -1,11 +1,11 @@
 
 export type Patient ={
-    id: String,
-    name: String,
-    caretaker:String,
-    Mail:String,
+    id: string,
+    name: string,
+    caretaker:string,
+    Mail:string,
     Date:Date,
-    symptoms:String,
+    symptoms:string,
 }
 
 export type DropID = Omit<Patient,'id'>
