@@ -6,6 +6,7 @@ import { Error } from "./Error"
 import type { DropID } from "../Types/Types"
 import { UseStorePatients } from "../Store/Store"
 import { useEffect } from "react"
+import {toast} from 'react-toastify'
 
 
 export const Form = () => {
@@ -32,11 +33,13 @@ export const Form = () => {
 
         if(patiendEdit){
             update(Data)
+            toast('The patient`s status was updated', {type:'success'} )
         }else{
             addPatient({
             ...Data,
             date: new Date(Data.date) // 👈 convierte string a Date
         })
+        toast('The patient was added correctly')
         }
 
         reset()
@@ -72,7 +75,7 @@ export const Form = () => {
                       })}
                   />
                   {errors.name && (
-                     <Error>{errors.name?.message.toString()}</Error>
+                     <Error>{errors.name?.message?.toString()}</Error>
                   )}
                  
                  
@@ -93,7 +96,7 @@ export const Form = () => {
                       })}
                 />
                  {errors.caretaker && (
-                     <Error>{errors.caretaker?.message.toString()}</Error>
+                     <Error>{errors.caretaker?.message?.toString()}</Error>
                   )}
               </div>
 
@@ -115,7 +118,7 @@ export const Form = () => {
                   })} 
               />
               {errors.email && (
-                     <Error>{errors.email?.message.toString()}</Error>
+                     <Error>{errors.email?.message?.toString()}</Error>
                   )}
             </div>
 
@@ -132,7 +135,7 @@ export const Form = () => {
                       })}
                 />
                  {errors.date && (
-                     <Error>{errors.date?.message.toString()}</Error>
+                     <Error>{errors.date?.message?.toString()}</Error>
                   )}
             </div>
             

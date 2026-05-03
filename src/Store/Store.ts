@@ -3,6 +3,7 @@
 import { create } from 'zustand'
 import { v4 as uuidv4 } from 'uuid'
 import type { Patient } from '../Types/Types'  
+import { createJSONStorage, persist } from "zustand/middleware";
 
 
 interface StatePatients {
@@ -15,14 +16,12 @@ interface StatePatients {
 }
 
 
-export const UseStorePatients = create<StatePatients>((set) => ({
+export const UseStorePatients = create<StatePatients>()(persist((set) => ({
     patients: [],  
     patiendEdit:'',
-    
-    
     addPatient: (data) => {
         const newPatient: Patient = {
-            id: uuidv4(),  // ✅ UUID
+            id: uuidv4(),
             ...data
         }
         set((state) => ({
@@ -30,12 +29,12 @@ export const UseStorePatients = create<StatePatients>((set) => ({
         }))
     },
     
-    
     deletePatient: (id) => {
         set((state) => ({
             patients: state.patients.filter(patient => patient.id !== id)
         }))
     },
+
     getPatiend:(id) => {
         set(() => ({
             patiendEdit: id
@@ -45,7 +44,11 @@ export const UseStorePatients = create<StatePatients>((set) => ({
     update:(id) => {
         set((state) => ({
             patients: state.patients.map((item) => item.id === state.patiendEdit ?
-            {id: state.patiendEdit, ...id} : item ), patiendEdit:''
+            {id: state.patiendEdit, ...id} : item), patiendEdit:''
         }))
-    }
+    },
+
+}), {
+    name: 'Storage',
+    storage: createJSONStorage(() => localStorage)  
 }))
